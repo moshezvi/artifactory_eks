@@ -1,0 +1,25 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: artifactory-eks-cluster
+  region: us-east-2
+
+iam:
+  withOIDC: true
+
+addons:
+  - name: aws-ebs-csi-driver
+    attachPolicyARNs:
+      - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+
+nodeGroups:
+  - name: ng-artifactory
+    instanceType: t3.medium
+    desiredCapacity: 2
+    volumeSize: 50
+    ssh:
+      allow: true
+      publicKeyName: ohio_key
+    tags:
+      Name: artifactory-eks-cluster-ng-artifactory
