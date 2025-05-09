@@ -1,0 +1,9 @@
+artifactory:
+  masterKeySecretName: artifactory-master-key
+  joinKeySecretName: artifactory-join-key
+
+# databaseUpgradeReady: true
+
+# postgresql:
+#   image:
+#     tag: 16.6.0-debian-12-r2

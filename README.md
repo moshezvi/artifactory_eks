@@ -26,39 +26,20 @@ gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   f
 ```
 
 ## Artifactory via Helm
-Create namespace 'artifactory'
+Create namespace 'artifactor
 ```
 kubectl create namespace artifactory
 ```
 
 ### Keys
-Create MASTER_KEY or use existing one?
 ```
-# Create a key
-export MASTER_KEY=$(openssl rand -hex 32)
-echo ${MASTER_KEY}
- 
-# Create a secret containing the key. The key in the secret must be named master-key
-kubectl create secret generic my-masterkey-secret -n artifactory --from-literal=master-key=${MASTER_KEY}
-``` 
-When using Helm subsequently, pass the following:
-```
---set artifactory.masterKeySecretName=my-masterkey-secret
-```
+# Create keys and store them in kube
+kubectl create secret generic artifactory-master-key -n artifactory --from-literal=master-key=$(openssl rand -hex 32)
+kubectl create secret generic artifactory-join-key -n artifactory --from-literal=join-key=$(openssl rand -hex 32)
 
-Create JOIN_KEY
-```
-# Create a key
-export JOIN_KEY=$(openssl rand -hex 32)
-echo ${JOIN_KEY}
- 
-# Create a secret containing the key. The key in the secret must be named join-key
-kubectl create secret generic my-joinkey-secret -n artifactory --from-literal=join-key=${JOIN_KEY}
-```
-
-When using Helm subsequently, pass the following:
-```
---set artifactory.joinKeySecretName=my-joinkey-secret
+# add them to values.yaml, or use in helm calls as follows
+--set artifactory.masterKeySecretName=artifactory-master-key
+--set artifactory.joinKeySecretName=artifactory-join-key
 ```
 
 ### Helm
@@ -66,5 +47,11 @@ Add JFrog repo
 ```
 helm repo add jfrog https://charts.jfrog.io
 helm repo update
+--set artifactory.masterKeySecretName=artifactory-master-key
+--set artifactory.joinKeySecretName=artifactory-join-key
+
+# OR
+add the file flag --CHECK WHAT IT IS--
+
 ```
 
