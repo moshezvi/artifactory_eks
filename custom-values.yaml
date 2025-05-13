@@ -1,6 +1,8 @@
 artifactory:
   masterKeySecretName: artifactory-master-key
   joinKeySecretName: artifactory-join-key
+  image:
+    tag: "7.77.3"  # Replace with the desired Artifactory version
 
 # databaseUpgradeReady: true
 

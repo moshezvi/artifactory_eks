@@ -7,31 +7,21 @@ metadata:
 
 iam:
   withOIDC: true
-  # serviceAccounts:
-  #   - metadata:
-  #       name: artifactory-sa
-  #       namespace: default
-  #     attachPolicyARNs:
-  #       - arn:aws:iam::aws:policy/AmazonEBSCSIDriverPolicy
-  #       - arn:aws:iam::aws:policy/AmazonS3FullAccess
-  #     roleName: ArtifactoryServiceRole
 
 addons:
   - name: aws-ebs-csi-driver
     attachPolicyARNs:
       - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
 
-nodeGroups:
+managedNodeGroups:
   - name: ng-artifactory-2
     instanceType: t3.large
-    minSize: 0   # Allow scaling down to zero nodes
+    minSize: 0
     maxSize: 2
-    desiredCapacity: 0
+    desiredCapacity: 2
     volumeSize: 50
     ssh:
       allow: true
       publicKeyName: ohio_key
     tags:
       Name: artifactory-eks-cluster-ng-artifactory
-
-
