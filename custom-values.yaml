@@ -3,10 +3,10 @@ postgresql:
 
 database:
   type: postgresql
-  url: "jdbc:postgresql://artifactory-pg-12.crco86gkgsng.us-east-2.rds.amazonaws.com:5432/artifactory"
+  url: "jdbc:postgresql://pg-12-tf.crco86gkgsng.us-east-2.rds.amazonaws.com:5432/artifactory"
   driver: org.postgresql.Driver
   user: artifactory
-  password: password1
+  password: password123
 
 artifactory:
   masterKeySecretName: artifactory-master-key

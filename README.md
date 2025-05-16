@@ -1,29 +1,4 @@
 # Artifactory dep
-## EKS cluster
-To create the cluster, run:
-```
-eksctl create cluster -f artifactory-cluster.yaml
-```
-
-To verify the storageclass is set to default:
-```
-kubectl get storageclass
-```
-should return:
-```
-NAME   PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-gp2    kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  37m
-```
-
-To make it default:
-```
-kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-```
-Then check the storage class:
-```
-NAME            PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-gp2 (default)   kubernetes.io/aws-ebs   Delete          WaitForFirstConsumer   false                  45ms
-```
 
 ## Artifactory via Helm
 
@@ -46,9 +21,9 @@ kubectl create secret generic artifactory-join-key -n artifactory --from-literal
 #### v7.77.3
 - Helm chart version is 107.77.3 
 ```
-helm install artifactory jfrog/artifactory --version "107.77.3" -f custom-values.yaml -n artifactory 
+helm install artifactory jfrog/artifactory --version "107.77.3" -f custom-values.yaml -n artifactory --create-namespace
 
-helm upgrade --install artifactory --version "107.77.3" -f custom-values.yaml --namespace artifactory --create-namespace jfrog/artifactory
+helm upgrade --install artifactory jfrog/artifactory --version "107.77.3" -f custom-values.yaml -n artifactory --create-namespace 
 
 ```
 Verify pod versions:
@@ -60,11 +35,11 @@ kubectl get pods -n artifactory  -o jsonpath='{.items[*].spec.containers[*].imag
 #### Cleanup
 ```
 kubectl scale statefulset artifactory --replicas=0 -n artifactory
-helm uninstall artifactory && sleep 90 && kubectl delete pvc -l app=artifactory
-
 # make sure to delete pvcs and pvs for a clean slate
-
+helm uninstall artifactory && sleep 90 && kubectl delete pvc -l app=artifactory
 kubectl delete namespace artifactory
+
+# if you want to remove the cluster
 #eksctl delete cluster --name artifactory-eks-cluster
 ```
 
