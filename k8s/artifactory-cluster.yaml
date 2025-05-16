@@ -17,8 +17,8 @@ managedNodeGroups:
   - name: ng-artifactory-2
     instanceType: t3.large
     minSize: 0
-    maxSize: 2
-    desiredCapacity: 2
+    maxSize: 3
+    desiredCapacity: 3
     volumeSize: 50
     ssh:
       allow: true

@@ -43,6 +43,34 @@ kubectl create secret generic artifactory-join-key -n artifactory --from-literal
 ```
 
 ### Helm
+#### v7.77.3
+- Helm chart version is 107.77.3 
+```
+helm install artifactory jfrog/artifactory --version "107.77.3" -f custom-values.yaml -n artifactory 
+
+helm upgrade --install artifactory --version "107.77.3" -f custom-values.yaml --namespace artifactory --create-namespace jfrog/artifactory
+
+```
+Verify pod versions:
+```
+kubectl get pods -n artifactory  -o jsonpath='{.items[*].spec.containers[*].image}' 
+```
+
+
+#### Cleanup
+```
+kubectl scale statefulset artifactory --replicas=0 -n artifactory
+helm uninstall artifactory && sleep 90 && kubectl delete pvc -l app=artifactory
+
+# make sure to delete pvcs and pvs for a clean slate
+
+kubectl delete namespace artifactory
+#eksctl delete cluster --name artifactory-eks-cluster
+```
+
+
+
+### Latest version
 #### Add JFrog repo
 ```
 helm repo add jfrog https://charts.jfrog.io
@@ -59,6 +87,9 @@ helm install artifactory artifactory \
 If using the custom-values file:
 ```
 helm install artifactory jfrog/artifactory -f custom-values.yaml -n artifactory --create-namespace
+helm upgrade --install jfrog/artifactory --namespace artifactory --create-namespace jfrog/artifactory
+
+
 ```
 
 #### Upgrade Artifactory 
@@ -66,24 +97,3 @@ helm install artifactory jfrog/artifactory -f custom-values.yaml -n artifactory 
 helm upgrade artifactory jfrog/artifactory -f custom-values.yaml -n artifactory
 ```
 
-# Cleanup
-```
-kubectl scale statefulset artifactory --replicas=0 -n artifactory
-helm uninstall jfrog/artifactory -n artifactory
-
-# make sure to delete pvcs and pvs for a clean slate
-
-kubectl delete namespace artifactory
-#eksctl delete cluster --name artifactory-eks-cluster
-```
-
-
-# v7.77.3
-- Helm chart version is 107.77.3 
-```
-helm install artifactory jfrog/artifactory --version "107.77.3" -f custom-values.yaml -n artifactory 
-```
-Verify pod versions:
-```
-kubectl get pods -n artifactory  -o jsonpath='{.items[*].spec.containers[*].image}' 
-```

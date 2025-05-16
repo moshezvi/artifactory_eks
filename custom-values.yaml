@@ -1,10 +1,21 @@
+postgresql:
+ enabled: false
+
+database:
+  type: postgresql
+  url: "jdbc:postgresql://artifactory-pg-12.crco86gkgsng.us-east-2.rds.amazonaws.com:5432/artifactory"
+  driver: org.postgresql.Driver
+  user: artifactory
+  password: password1
+
 artifactory:
   masterKeySecretName: artifactory-master-key
   joinKeySecretName: artifactory-join-key
   image:
     tag: "7.77.3"  # Replace with the desired Artifactory version
+  replicaCount: 3
 
-# databaseUpgradeReady: true
+#databaseUpgradeReady: true
 
 # postgresql:
 #   image:
